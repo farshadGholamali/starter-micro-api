@@ -51,7 +51,7 @@ http.createServer(function (req, res) {
     sendDollarPriceToGroup(groupChatId)
 
     setInterval(() => sendDollarPriceToGroup(groupChatId), 1000);
-
+    res.end();
 }).listen(process.env.PORT || 3000);
 
 
