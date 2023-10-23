@@ -1,6 +1,8 @@
 const axios = require('axios');
 const TelegramBot = require('node-telegram-bot-api');
 const fs = require('fs');
+var http = require('http');
+
 // import { readFile } from "fs";
 
 // Replace with your Telegram Bot API token
@@ -43,10 +45,19 @@ async function sendDollarPriceToGroup(chatId) {
 // Replace with your Telegram group chat ID
 const groupChatId = '-1002083559719';
 
-sendDollarPriceToGroup(groupChatId)
+http.createServer(function (req, res) {
+    console.log(`Just got a request at ${req.url}!`)
+    res.write('Yo!');
+    sendDollarPriceToGroup(groupChatId)
+
+    setInterval(() => sendDollarPriceToGroup(groupChatId), 1000);
+    res.end();
+}).listen(process.env.PORT || 3000);
+
+
 // Schedule sending the dollar price to the group at a specific interval (e.g., every hour)
 // 3600000 milliseconds = 1 hour
-setInterval(() => sendDollarPriceToGroup(groupChatId), 1000);
+
 
 function formatPrice(price) {
     return price.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
